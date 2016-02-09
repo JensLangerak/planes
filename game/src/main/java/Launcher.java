@@ -15,7 +15,7 @@ public class Launcher extends Application {
 	public void start(Stage primaryStage) {
 		Game game = new Game(60);
 		game.init(primaryStage);
-
+		game.startGameLoop();
 		primaryStage.show();
 	}
 }
