@@ -3,5 +3,5 @@ package controller;
 /**
  * Created by jens on 2/9/16.
  */
-public class Agent {
+public abstract class Agent {
 }

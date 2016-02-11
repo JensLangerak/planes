@@ -43,7 +43,7 @@ public class Game {
 		primaryStage.setTitle("Planes");
 		primaryStage.setScene(scene);
 		createGameLoop();
-
+		entityManager.createPlayer();
 	}
 
 	protected final void createGameLoop() {

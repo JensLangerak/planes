@@ -15,30 +15,35 @@ public class Plane extends Entity {
 	private static int thickPlane = 10;
 	private Color color = Color.RED;
 
-	public Plane(double maxVelX, double maxVelOr, Vector2D pos, double orientation) {
-		super(maxVelX, maxVelOr, pos, orientation);
+	public Plane(double maxVelX, double minVelX, double maxVelOr, Vector2D pos, double orientation) {
+		super(maxVelX, minVelX, maxVelOr, pos, orientation);
+		setVelX(1);
 	}
 
 	@Override
-	public void draw(GraphicsContext gc) {
+	public void draw(GraphicsContext gc, Vector2D center, Vector2D screenCenter, double orientation) {
 		gc.setStroke(color);
-		drawPlane(gc);
-		drawWing(gc);
-	}
-
-	protected void drawPlane(GraphicsContext gc) {
-		gc.setLineWidth(thickPlane);
 		Vector2D start = new Vector2D(1, this.pos);
-		Vector2D dir = getDir(this.orientation);
-		start = start.add( sizePlane / 3 * 1, dir);
-		Vector2D end = start.subtract(sizePlane, dir);
-		gc.strokeLine(start.getX(), start.getY(), end.getX(), end.getY());
-		drawTail(gc, end);
+		start = start.subtract(1, center);
+		start = this.rotate(start, orientation);
+		start = start.add(screenCenter);
+		double relOrientation = (this.orientation - orientation) % (2 * Math.PI);
+		drawPlane(gc, start, relOrientation);
+		drawWing(gc, start, relOrientation);
 	}
 
-	private void drawTail(GraphicsContext gc, Vector2D end) {
+	protected void drawPlane(GraphicsContext gc, Vector2D relStart, double relOrientation) {
+		gc.setLineWidth(thickPlane);
+		Vector2D dir = getDir(relOrientation);
+		relStart = relStart.add( sizePlane / 3 * 1, dir);
+		Vector2D end = relStart.subtract(sizePlane, dir);
+		gc.strokeLine(relStart.getX(), relStart.getY(), end.getX(), end.getY());
+		drawTail(gc, end, relOrientation);
+	}
+
+	private void drawTail(GraphicsContext gc, Vector2D end, double relOrientation) {
 		Vector2D start = new Vector2D(1, end);
-		double or = this.orientation + 0.5 * Math.PI;
+		double or = (relOrientation + 0.5 * Math.PI) % (2 * Math.PI);;
 		Vector2D dir = getDir(or);
 		start = start.subtract(sizeTail / 2, dir);
 		end = new Vector2D(1, start);
@@ -46,10 +51,9 @@ public class Plane extends Entity {
 		gc.strokeLine(start.getX(), start.getY(), end.getX(), end.getY());
 	}
 
-	protected void drawWing(GraphicsContext gc) {
+	protected void drawWing(GraphicsContext gc, Vector2D start, double relOrientation) {
 		gc.setLineWidth(thickWing);
-		Vector2D start = new Vector2D(1, this.pos);
-		double or = this.orientation + 0.5 * Math.PI;
+		double or = (relOrientation + 0.5 * Math.PI) % (2 * Math.PI);
 		Vector2D dir = getDir((float) or);
 		start = start.subtract(sizeWing / 2, dir);
 		Vector2D end = new Vector2D(1, start);
@@ -66,7 +70,7 @@ public class Plane extends Entity {
 
 	private Vector2D getDir(double orientation) {
 		return new Vector2D(
-				(float)Math.cos(orientation),
-				-(float)Math.sin(orientation)).normalize();
+				-(float)Math.sin(orientation),
+				(float)Math.cos(orientation)).normalize();
 	}
 }
