@@ -132,7 +132,6 @@
 		<module name="EmptyStatement"/>
 		<module name="EqualsHashCode"/>
 		<module name="IllegalInstantiation"/>
-		<module name="MagicNumber"/>
 		<module name="MissingSwitchDefault"/>
 		<module name="SimplifyBooleanExpression"/>
 		<module name="SimplifyBooleanReturn"/>

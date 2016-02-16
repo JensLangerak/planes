@@ -1,7 +1,7 @@
 package controller;
 
 /**
- * Created by jens on 2/9/16.
+ * Abstract class for players and ai.
  */
 public abstract class Agent {
 }

@@ -1,16 +1,14 @@
 package controller;
 
-import entities.Plane;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 /**
- * Created by jens on 2/9/16.
+ * Bind keyboard inputs to a controller.
  */
-public class Player extends Agent{
+public class Player extends Agent {
 	protected PlaneController plane;
 	protected boolean left;
 	protected boolean right;
@@ -45,6 +43,9 @@ public class Player extends Agent{
 		});
 	}
 
+	/**
+	 * Check which way the plane should turn to.
+	 */
 	protected void controlPlane() {
 		if (left && !right) {
 			plane.goLeft();
@@ -55,10 +56,18 @@ public class Player extends Agent{
 		}
 	}
 
+	/**
+	 * Get player position.
+	 * @return vector the represents the position.
+	 */
 	public Vector2D getPos() {
 		return plane.getPos();
 	}
 
+	/**
+	 * Get player rotation.
+	 * @return double the represents the orientation.
+	 */
 	public double getOrientation() {
 		return plane.getOrientation();
 	}

@@ -1,24 +1,17 @@
-import javafx.event.Event;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
+
 import javafx.stage.Stage;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.animation.TimelineBuilder;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+
 import javafx.util.Duration;
 
 /**
- * Created by jens on 2/9/16.
+ * Gameobject that manage the game.
  */
 public class Game {
 	protected Group root;
@@ -28,13 +21,21 @@ public class Game {
 
 	protected int framesPerSecond;
 
+	/**
+	 * Create game.
+	 * @param framesPerSecond number of thicks in one second.
+	 */
 	public Game(int framesPerSecond) {
 		this.framesPerSecond = framesPerSecond;
 	}
 
+	/**
+	 * Create the game, but do not start it.
+	 * @param primaryStage Place to draw the game upon.
+	 */
 	public void init(Stage primaryStage) {
 		root = new Group();
-		Canvas gameField = new Canvas(600, 600);
+		Canvas gameField = new Canvas(800, 800);
 
 		entityManager = new EntityManager(gameField);
 		root.getChildren().add(gameField);
@@ -46,23 +47,26 @@ public class Game {
 		entityManager.createPlayer();
 	}
 
+	/**
+	 * Create a gameloop that loops framesPerSecond times a second.
+	 * Update the game and draw the game.
+	 */
 	protected final void createGameLoop() {
-		KeyFrame oneFrame = new KeyFrame(Duration.millis(1000/framesPerSecond),
-				new EventHandler() {
+		KeyFrame oneFrame = new KeyFrame(Duration.millis(1000.0 / ((double) framesPerSecond)),
+				event -> {
+					entityManager.update();
+					entityManager.draw();
 
-					@Override
-					public void handle(Event event) {
-						entityManager.update();
-						entityManager.draw();
-
-					}
-				}); // oneFrame
+				});
 
 		// sets the game world's game loop (Timeline)
 		gameLoop = new Timeline(framesPerSecond, oneFrame);
 		gameLoop.setCycleCount(Animation.INDEFINITE);
 	}
 
+	/**
+	 * Start the game.
+	 */
 	public void startGameLoop() {
 		gameLoop.play();
 	}

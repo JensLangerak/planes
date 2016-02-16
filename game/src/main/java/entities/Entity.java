@@ -2,7 +2,6 @@ package entities;
 
 import javafx.scene.canvas.GraphicsContext;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.jcp.xml.dsig.internal.MacOutputStream;
 
 /**
  * Class that represents a moveable entity in a 2d plane.
@@ -27,24 +26,34 @@ public abstract class Entity {
 	 * @param pos start position
 	 * @param orientation start orientation
 	 */
-	public Entity(double maxVelX, double minVelX, double maxVelOr, Vector2D pos, double orientation) {
+	public Entity(double maxVelX,
+				  double minVelX,
+				  double maxVelOr,
+				  Vector2D pos,
+				  double orientation) {
 		this.maxVelOr = maxVelOr;
 		this.maxVelX = maxVelX;
 		this.pos = pos;
 		this.orientation = orientation;
 		this.minVelX = minVelX;
 
-		this.vel = (minVelX <= 0) ? 0 : minVelX;
+		this.vel = minVelX <= 0 ? 0 : minVelX;
 		this.velOr = 0;
 	}
 
 	/**
 	 * Draw a picture of the entity on the GraphicsContext.
 	 * @param gc graphicContext to draw.
-	 * @param upperLeft coordinates of the upper left point of the plane.
+	 * @param center coordinates of the centre of the screen.
+	 * @param screenCenterOffset pixel center of the screen.
+	 *            So center is the position in the game
+	 *                              that must be at the position screenCenterOffset.
 	 * @param orientation orientation of the screen.
 	 */
-	public abstract void draw(GraphicsContext gc, Vector2D center, Vector2D screenCenter, double orientation);
+	public abstract void draw(GraphicsContext gc,
+							  Vector2D center,
+							  Vector2D screenCenterOffset,
+							  double orientation);
 
 	/**
 	 * Move the entity one tick.
@@ -59,31 +68,76 @@ public abstract class Entity {
 	 * @return the set velocity.
 	 */
 	public double setVelX(double vel) {
-		this.vel = (vel > maxVelX) ? maxVelX : (vel < minVelX) ? minVelX : vel;
+		this.vel = vel > maxVelX ? maxVelX : vel < minVelX ? minVelX : vel;
 		return this.vel;
 	}
 
 	/**
-	 * Set turn speed and check if the turn speed is in range -max turn speed and max turn speed
+	 * Getter for the velocity.
+	 * @return the velocity.
+	 */
+	public double getVelX() {
+		return this.vel;
+	}
+	/**
+	 * Set turn speed and check if the turn speed is in range -max turn speed and max turn speed.
 	 * If new turn speed > maxVelOr than new turn speed is maxVelOr
 	 * If new turn speed < -maxVelOr than new turn speed is -maxVelOr
 	 * @param velOr the new turn speed
 	 * @return the set turn speed.
 	 */
 	public double setVelOr(double velOr) {
-		this.velOr = (velOr > maxVelOr) ? maxVelOr : (velOr < -maxVelOr) ? -maxVelOr : velOr;
+		this.velOr = velOr > maxVelOr ? maxVelOr : velOr < -maxVelOr ? -maxVelOr : velOr;
 		return this.velOr;
 	}
 
+	/**
+	 * Getter for the turn speed.
+	 * @return the turning speed.
+	 */
+	public double getVelOr() {
+		return this.velOr;
+	}
+
+	/**
+	 * Set the position of this entity.
+	 * @param pos a vector the represents the position.
+	 */
+	public void setPos(Vector2D pos) {
+		this.pos = pos;
+	}
+
+	/**
+	 * Return the position of this entity.
+	 * @return a vector the represents the position.
+	 */
 	public Vector2D getPos() {
 		return pos;
 	}
 
+	/**
+	 * Return the orientation of this entity.
+	 * @return a double the represents the orientation.
+	 */
 	public double getOrientation() {
 		return orientation;
 	}
 
-	public Vector2D rotate(Vector2D point, double theta) {
+	/**
+	 * Set the orientation of this entity.
+	 * @param orientation a double the represents the orientation.
+	 */
+	public void setOrientation(double orientation) {
+		this.orientation = orientation;
+	}
+
+	/**
+	 * Rotate a point around the center with theta rad.
+	 * @param point point to rotate.
+	 * @param theta rads to rotate.
+	 * @return the rotated point.
+	 */
+	protected Vector2D rotate(Vector2D point, double theta) {
 		Vector2D temp = new Vector2D(point.getX(), -point.getY());
 		double x = temp.getX() * Math.cos(theta) - temp.getY() * Math.sin(theta);
 		double y = temp.getX() * Math.sin(theta) + temp.getY() * Math.cos(theta);
