@@ -96,7 +96,7 @@ public class Triangle implements Body {
 	public ArrayList<Line> getLines() {
 		ArrayList<Line> lines = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
-			lines.add(new Line(points[i], points[(i+1)%4]));
+			lines.add(new Line(points[i], points[(i+1)%3]));
 		}
 		return lines;
 	}

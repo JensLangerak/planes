@@ -54,8 +54,15 @@ public class EntityManager {
 	 */
 	public void update() {
 		for (Entity entity : entities.keySet()) {
-			entity.move();
+			entity.performMove();
 		}
+
+		for (Entity entity : entities.keySet()) {
+			entity.checkCollisions(entities.keySet());
+		}
+
+
+
 	}
 
 	/**

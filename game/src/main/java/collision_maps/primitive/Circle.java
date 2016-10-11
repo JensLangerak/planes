@@ -58,7 +58,7 @@ public class Circle implements Body {
 
 	@Override
 	public boolean collide(Body other) {
-		return false;
+		return other.collide(this);
 	}
 
 	@Override

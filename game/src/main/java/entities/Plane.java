@@ -1,8 +1,11 @@
 package entities;
 
+import collision_maps.primitive.Circle;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+
+import java.util.ArrayList;
 
 /**
  * Class that represents a plane.
@@ -100,6 +103,12 @@ public class Plane extends Entity {
 
 		orientation += velOr;
 		orientation = orientation < 0 ? orientation + 2 * Math.PI : orientation % (2 * Math.PI);
+	}
+
+	@Override
+	public void updateCollisionMesh() {
+		this.collisionMesh = new ArrayList<>();
+		this.collisionMesh.add(new Circle(this.pos, 25));
 	}
 
 	/**

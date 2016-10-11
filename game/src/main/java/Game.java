@@ -55,6 +55,8 @@ public class Game {
 		KeyFrame oneFrame = new KeyFrame(Duration.millis(1000.0 / ((double) framesPerSecond)),
 				event -> {
 					entityManager.update();
+
+					//TODO do not always redraw, (high speed sim)
 					entityManager.draw();
 
 				});

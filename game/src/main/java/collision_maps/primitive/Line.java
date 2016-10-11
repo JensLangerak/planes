@@ -165,4 +165,13 @@ public class Line implements Intersect {
 		return end;
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Line) {
+			Line o = (Line) other;
+			return o.left.equals(this.left) && o.right.equals(this.right);
+		}
+		return false;
+	}
+
 }
