@@ -1,7 +1,11 @@
 package entities;
 
+import collision_maps.Body;
 import javafx.scene.canvas.GraphicsContext;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Class that represents a moveable entity in a 2d plane.
@@ -17,6 +21,8 @@ public abstract class Entity {
 
 	protected double vel;
 	protected double velOr;
+
+	protected ArrayList<Body> collisionMesh;
 
 	/**
 	 * Create a new entity.
@@ -55,6 +61,10 @@ public abstract class Entity {
 							  Vector2D screenCenterOffset,
 							  double orientation);
 
+	public void performMove() {
+		move();
+		updateCollisionMesh();
+	}
 	/**
 	 * Move the entity one tick.
 	 */
@@ -143,4 +153,45 @@ public abstract class Entity {
 		double y = temp.getX() * Math.sin(theta) + temp.getY() * Math.cos(theta);
 		return new Vector2D(x, -y);
 	}
+
+	public ArrayList<Body> getCollisionMesh() {
+		return collisionMesh;
+	}
+
+	public void setCollisionMesh(ArrayList<Body> collisionMesh) {
+		this.collisionMesh = collisionMesh;
+	}
+
+	public abstract void updateCollisionMesh();
+	
+	public boolean collide(Entity other) {
+		for (Body body : collisionMesh) {
+			for (Body otherBody : other.getCollisionMesh()) {
+				if (body.collide(otherBody)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public void checkCollisions(Set<Entity> entities) {
+		for (Entity other: entities) {
+			if (other == this) {
+				continue;
+			} else {
+				if (collide(other)) {
+					handleCollision();
+				}
+			}
+
+		}
+	}
+
+	//TEMP for testing
+	public void handleCollision() {
+		System.out.println("collision");
+	}
+
+
 }
