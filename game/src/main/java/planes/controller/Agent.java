@@ -1,7 +1,7 @@
 package planes.controller;
 
 /**
- * Abstract class for players and ai.
+ * Abstract class for players and AI.
  */
 public abstract class Agent {
 }

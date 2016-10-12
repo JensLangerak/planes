@@ -6,10 +6,11 @@ import javafx.scene.paint.Color;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
- * Class that represents a moveable entity in a 2d plane.
+ * Class that represents an entity in a 2d plane.
  * Created by jens on 2/9/16.
  */
 public abstract class Entity {
@@ -64,15 +65,20 @@ public abstract class Entity {
 	 * @param orientation orientation of the screen.
 	 */
 	public void draw(GraphicsContext gc,
-							  Vector2D center,
-							  Vector2D screenCenterOffset,
-							  double orientation) {
+					 Vector2D center,
+					 Vector2D screenCenterOffset,
+					 double orientation) {
 		gc.setStroke(color);
+
+		//calculate where the entity must be drawn.
 		Vector2D start = new Vector2D(1, this.pos);
 		start = start.subtract(1, center);
 		start = this.rotate(start, orientation);
 		start = start.add(screenCenterOffset);
+
+		//calculate the orientation
 		double relOrientation = (this.orientation - orientation) % (2 * Math.PI);
+
 		drawEntity(gc, start, relOrientation);
 	}
 	public abstract void drawEntity(GraphicsContext gc, Vector2D start, double relOrientation);
@@ -112,6 +118,7 @@ public abstract class Entity {
 	public double getVelX() {
 		return this.vel;
 	}
+
 	/**
 	 * Set turn speed and check if the turn speed is in range -max turn speed and max turn speed.
 	 * If new turn speed > maxVelOr than new turn speed is maxVelOr
@@ -177,16 +184,32 @@ public abstract class Entity {
 		return new Vector2D(x, -y);
 	}
 
+	/**
+	 * Return the collision mesh.
+	 * @return the collision mesh.
+	 */
 	public ArrayList<Body> getCollisionMesh() {
 		return collisionMesh;
 	}
 
+	/**
+	 * Set the collision mesh.
+	 * @param collisionMesh the new collision mesh.
+	 */
 	public void setCollisionMesh(ArrayList<Body> collisionMesh) {
 		this.collisionMesh = collisionMesh;
 	}
 
+	/**
+	 * Recalculate the collision mesh.
+	 */
 	public abstract void updateCollisionMesh();
-	
+
+	/**
+	 * Check if this entity collides with the other entity.
+	 * @param other the other entity.
+	 * @return true if the two entities collide.
+	 */
 	public boolean collide(Entity other) {
 		for (Body body : collisionMesh) {
 			for (Body otherBody : other.getCollisionMesh()) {
@@ -198,7 +221,11 @@ public abstract class Entity {
 		return false;
 	}
 
-	public void checkCollisions(Set<Entity> entities) {
+	/**
+	 * Check if this entity collides with one of the entities is the list.
+	 * @param entities entities that must be checked for a collision with this entity.
+	 */
+	public void checkCollisions(List<Entity> entities) {
 		for (Entity other: entities) {
 			if (other == this) {
 				continue;
@@ -222,11 +249,15 @@ public abstract class Entity {
 				(float) Math.cos(orientation)).normalize();
 	}
 
+	/**
+	 *
+	 * @return true if this entity is dead and can be removed.
+	 */
 	public boolean isDead() {
 		return dead;
 	}
 
-	//TEMP for testing
+	//TODO added for testing, might want to change this later.
 	public void handleCollision() {
 
 	}

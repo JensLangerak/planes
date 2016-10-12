@@ -41,6 +41,8 @@ public class Plane extends Entity {
 	public void drawEntity(GraphicsContext gc, Vector2D start, double relOrientation) {
 		drawPlane(gc, start, relOrientation);
 		drawWing(gc, start, relOrientation);
+
+		//TODO test code for hit, should be changed.
 		if (hitThick < 30) {
 			hitThick++;
 		} else {
@@ -102,6 +104,11 @@ public class Plane extends Entity {
 		this.collisionMesh.add(new Circle(this.pos, 20));
 	}
 
+	/**
+	 * Fire a projectile. Projectile is spawned just before the plane and is aimed at the current
+	 * direction of the plane.
+	 * @return a projectile if the plane could fire, else null
+	 */
 	public Projectile fire() {
 
 		if (fireTimer == maxFireTime) {

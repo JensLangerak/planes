@@ -14,6 +14,7 @@ import javafx.util.Duration;
 /**
  * Gameobject that manage the game.
  */
+//TODO might want to change this to singleton
 public class Game {
 	protected Group root;
 	protected Scene scene;
@@ -57,7 +58,7 @@ public class Game {
 				event -> {
 					entityManager.update();
 
-					//TODO do not always redraw, (high speed sim)
+					//TODO do not always redraw, (high speed simulation)
 					entityManager.draw();
 
 				});

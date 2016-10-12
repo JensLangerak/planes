@@ -6,7 +6,7 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import planes.entities.Projectile;
 
 /**
- * A planes.controller used to control the planes.
+ * A controller used to control the planes.
  */
 public class PlaneController extends Controller {
 	protected Plane plane;
@@ -14,7 +14,7 @@ public class PlaneController extends Controller {
 	protected EntityManager entityManager;
 
 	/**
-	 * Bind the planes.controller to a plane.
+	 * Bind the controller to a plane.
 	 * @param plane plane that must be controlled.
 	 */
 	public PlaneController(Plane plane, EntityManager entityManager) {
@@ -56,6 +56,9 @@ public class PlaneController extends Controller {
 		return plane.getPos();
 	}
 
+	/**
+	 * try to fire. If succeed add the projectile to the entityManage.
+	 */
 	public void fire() {
 		Projectile projectile = plane.fire();
 		if (projectile != null) {

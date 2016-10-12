@@ -3,8 +3,8 @@ package planes.controller;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 /**
- * Abstract class that has to ne implemented by controllers.
- * A planes.controller must be used to control the planes.entities.
+ * Abstract class that has to be implemented by controllers.
+ * A controller must be used to control the entities.
  */
 public abstract class Controller {
 	/**

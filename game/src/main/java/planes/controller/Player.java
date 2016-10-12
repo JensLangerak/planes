@@ -6,7 +6,7 @@ import javafx.scene.input.KeyEvent;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 /**
- * Bind keyboard inputs to a planes.controller.
+ * Bind keyboard inputs to a controller.
  */
 public class Player extends Agent {
 	protected PlaneController plane;

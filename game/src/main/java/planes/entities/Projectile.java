@@ -13,10 +13,15 @@ public class Projectile extends Entity {
 	protected int timeToLive;
 
 
+	/**
+	 * Create a new projectile.
+	 * @param pos the position where the projectile must be spawned.
+	 * @param orientation the orientation of the projectile.
+	 * @param speed the speed of the projectile.
+	 */
 	public Projectile(Vector2D pos, double orientation) {
 		this(pos, orientation, 10);
 	}
-
 	public Projectile(Vector2D pos, double orientation, float speed) {
 		super(speed, speed, 0, pos,  orientation);
 		timeToLive = 100;
@@ -34,6 +39,8 @@ public class Projectile extends Entity {
 	@Override
 	public void move() {
 		super.move();
+
+		//after some time the projectile must disappear.
 		timeToLive--;
 		if (timeToLive <= 0) {
 			dead = true;
