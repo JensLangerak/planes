@@ -231,7 +231,7 @@ public abstract class Entity {
 				continue;
 			} else {
 				if (collide(other)) {
-					handleCollision();
+					handleCollision(other);
 				}
 			}
 
@@ -258,7 +258,7 @@ public abstract class Entity {
 	}
 
 	//TODO added for testing, might want to change this later.
-	public void handleCollision() {
+	public void handleCollision(Entity collider) {
 
 	}
 

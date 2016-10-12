@@ -10,6 +10,7 @@
 	<version>0.01-SNAPSHOT</version>
 	<modules>
 		<module>game</module>
+		<module>learner</module>
 	</modules>
 	<name>Planes</name>
 	<properties>

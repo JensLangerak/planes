@@ -3,6 +3,7 @@ package planes.entities;
 import planes.collision_maps.primitive.Circle;
 import javafx.scene.canvas.GraphicsContext;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import planes.controller.Agent;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  */
 public class Projectile extends Entity {
 	protected int timeToLive;
-
+	protected Plane owner = null;
 
 	/**
 	 * Create a new projectile.
@@ -26,6 +27,14 @@ public class Projectile extends Entity {
 		super(speed, speed, 0, pos,  orientation);
 		timeToLive = 100;
 		dead = false;
+	}
+
+	/**
+	 * Set the agent that fired this projectile, used for score.
+	 * @param owner the agent that fires this projectile.
+	 */
+	public void setOwner(Plane owner) {
+		this.owner = owner;
 	}
 
 	@Override
@@ -54,7 +63,12 @@ public class Projectile extends Entity {
 	}
 
 	@Override
-	public void handleCollision() {
+	public void handleCollision(Entity collider) {
+		if (owner != null) {
+			if (collider instanceof Plane) {
+				owner.addScore(10);
+			}
+		}
 		this.dead = true;
 	}
 }

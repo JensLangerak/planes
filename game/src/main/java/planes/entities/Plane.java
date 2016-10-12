@@ -20,6 +20,7 @@ public class Plane extends Entity {
 	protected int fireTimer = 0;
 	protected int maxFireTime = 30;
 	protected int hitThick = 30;
+	int score = 0;
 
 	/**
 	 * Create a new plane.
@@ -114,7 +115,9 @@ public class Plane extends Entity {
 		if (fireTimer == maxFireTime) {
 			Vector2D firePos = this.pos.add(26, getDir(orientation));
 			fireTimer = 0;
-			return new Projectile(firePos, orientation);
+			Projectile projectile = new Projectile(firePos, orientation);
+			projectile.setOwner(this);
+			return projectile;
 
 		} else {
 			return null;
@@ -122,9 +125,20 @@ public class Plane extends Entity {
 	}
 
 	@Override
-	public void handleCollision() {
+	public void handleCollision(Entity other) {
 		System.out.println("collision");
 		this.color = Color.BLUE;
 		hitThick = 0;
+		score -= 10;
+		System.out.println(score);
+	}
+
+	/**
+	 * Increase the score with points.
+	 * @param points points that must be added to the score.
+	 */
+	public void addScore(int points) {
+		score += points;
+		System.out.println(score);
 	}
 }
