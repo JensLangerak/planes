@@ -8,9 +8,9 @@ import java.util.jar.Pack200;
  * Created by jens on 10/13/16.
  */
 public class NeuralNetwork {
-	Node[] startNodes;
-	Node[] endNodes;
-	List<Node[]> hiddenLayers;
+	protected Node[] startNodes;
+	protected Node[] endNodes;
+	protected List<Node[]> hiddenLayers;
 
 	public NeuralNetwork(Node[] startNodes, Node[] endNodes, List<Node[]> hiddenLayers) {
 		this.startNodes = startNodes;
