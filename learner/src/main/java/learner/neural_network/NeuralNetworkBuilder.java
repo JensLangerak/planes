@@ -19,6 +19,9 @@ public class NeuralNetworkBuilder {
 	 */
 	public NeuralNetworkBuilder(int numberEndNodes) {
 		endNodes = new Node[numberEndNodes];
+		for (int i = 0; i < numberEndNodes; i++) {
+			endNodes[i] = new Node();
+		}
 		lastAddedLayer = endNodes;
 		hiddenLayers = new LinkedList<>();
 	}
