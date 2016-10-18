@@ -1,5 +1,6 @@
 package learner.neural_network;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -10,7 +11,7 @@ public class Node {
 	protected Map<Node,Float> edges;
 
 	protected Node() {
-
+		edges = new HashMap<>();
 	}
 
 	/**
