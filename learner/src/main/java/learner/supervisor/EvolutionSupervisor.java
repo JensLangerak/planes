@@ -8,9 +8,9 @@ import java.util.*;
 /**
  * Created by jens on 10/18/16.
  */
-public class Supervisor {
-	protected Stack<Float>[] best;
-	protected float bestFitness;
+public class EvolutionSupervisor {
+	protected Stack<Float> best;
+	protected int bestFitness;
 	protected Stack<Float>[] currentGeneration;
 	protected int generationSize;
 	protected int[] networkSize;
@@ -19,6 +19,8 @@ public class Supervisor {
 	protected float maxEdgeValue;
 	protected float mutateChange;
 	protected Map<Stack<Float>, Integer> fitnessRate;
+	protected int nextStack;
+	protected int generationCount;
 
 	/**
 	 * Create a supervisor for the evolution process. This class handles the creation
@@ -26,8 +28,11 @@ public class Supervisor {
 	 * @param generationSize number of networks in one generation.
 	 * @param networkSize Array with the number of nodes per layer.
 	 */
-	public Supervisor(int generationSize, int[] networkSize, float minEdgeValue, float maxEdgeValue, float mutateChange) {
+	public EvolutionSupervisor(int generationSize, int[] networkSize, float minEdgeValue, float maxEdgeValue, float mutateChange) {
 		this.generationSize = generationSize;
+		if (generationSize < 2) {
+			throw new IllegalArgumentException("To small generation, need at least a size of 2.");
+		}
 		this.networkSize = networkSize;
 		if (networkSize.length < 2) {
 			throw new IllegalArgumentException("network must have at least a start and end layer");
@@ -52,9 +57,16 @@ public class Supervisor {
 		for (int i = 0; i < generationSize; i++) {
 			this.currentGeneration[i] = generateRandomStack(size);
 		}
+		nextStack = 0;
+		generationCount = 0;
 	}
 
+	/**
+	 * Create the next generation. The current generation is sorted bases on fitness score.
+	 * The best have a higher change to become a parent.
+	 */
 	public void nextGeneration() {
+		generationCount++;
 		List sortedList = new LinkedList(fitnessRate.entrySet());
 
 		// sort high to low
@@ -67,13 +79,25 @@ public class Supervisor {
 		for (int i = 0; i < generationSize; i++) {
 			int parent1 = calculateParentIndex(numberGen.nextInt(maxRandomValue), maxRandomValue);
 			int parent2 = calculateParentIndex(numberGen.nextInt(maxRandomValue), maxRandomValue);
+			//get different parents
+			while (parent1==parent2) {
+				parent2 = calculateParentIndex(numberGen.nextInt(maxRandomValue), maxRandomValue);
+			}
 			nextGen[i] = breed(sortedCurrentGeneration[parent1], sortedCurrentGeneration[parent2]);
 		}
 
 		this.currentGeneration = nextGen;
+		fitnessRate.clear();
+		nextStack = 0;
 
 	}
 
+	/**
+	 * Calculate the parent index.
+	 * @param randomValue the random value that is used
+	 * @param maxRandomValue the max value of the random value.
+	 * @return the parent index.
+	 */
 	private int calculateParentIndex(int randomValue, int maxRandomValue) {
 		int index = 0;
 		while (maxRandomValue > 0) {
@@ -148,5 +172,30 @@ public class Supervisor {
 			}
 		}
 		return child;
+	}
+
+	/**
+	 * Return the next stack.
+	 * @return the next stack.
+	 */
+	public Stack<Float> getNextStack() {
+		if (nextStack < generationSize) {
+			return currentGeneration[nextStack++];
+		} else {
+			//TODO decide how to do this (create next gen?)
+			return null;
+		}
+	}
+
+	/**
+	 * Set the fitness of a species.
+	 * @param stack the specie that belongs to the fitness score
+	 * @param score the fitness score of the specie
+	 */
+	public void setFitness(Stack<Float> stack, int score) {
+		if (bestFitness < score) {
+			this.best = stack;
+		}
+		fitnessRate.put(stack, score);
 	}
 }
