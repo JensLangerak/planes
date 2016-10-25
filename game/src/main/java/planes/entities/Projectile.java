@@ -71,4 +71,8 @@ public class Projectile extends Entity {
 		}
 		this.dead = true;
 	}
+
+	public Plane getOwner() {
+		return owner;
+	}
 }

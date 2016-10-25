@@ -101,4 +101,9 @@ public class EntityManager {
 		entities.add(entity);
 	}
 
+	//TODO find solution that does not require to return the entities array (and without cloning)
+	public List<Entity> getEntities() {
+		return entities;
+	}
+
 }

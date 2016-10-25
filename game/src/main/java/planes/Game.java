@@ -22,22 +22,35 @@ public class Game {
 	protected Timeline gameLoop;
 
 	protected int framesPerSecond;
+	protected static volatile Game instance = null;
 
 	/**
 	 * Create game.
-	 * @param framesPerSecond number of thicks in one second.
+
 	 */
-	public Game(int framesPerSecond) {
-		this.framesPerSecond = framesPerSecond;
+	protected Game() {
+
 	}
 
+	public static Game getInstance() {
+		if (instance == null) {
+			synchronized (Game.class) {
+				if (instance == null) {
+					Game.instance = new Game();
+				}
+			}
+		}
+		return Game.instance;
+	}
 	/**
 	 * Create the game, but do not start it.
 	 * @param primaryStage Place to draw the game upon.
+	 * @param framesPerSecond number of thicks in one second.
 	 */
-	public void init(Stage primaryStage) {
+	public void init(Stage primaryStage, int framesPerSecond) {
 		root = new Group();
 		Canvas gameField = new Canvas(800, 800);
+		this.framesPerSecond = framesPerSecond;
 
 		entityManager = new EntityManager(gameField);
 		root.getChildren().add(gameField);
@@ -66,6 +79,10 @@ public class Game {
 		// sets the game world's game loop (Timeline)
 		gameLoop = new Timeline(framesPerSecond, oneFrame);
 		gameLoop.setCycleCount(Animation.INDEFINITE);
+	}
+
+	public EntityManager getEntityManager() {
+		return entityManager;
 	}
 
 	/**

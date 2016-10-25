@@ -70,4 +70,8 @@ public class PlaneController extends Controller {
 	public double getOrientation() {
 		return plane.getOrientation();
 	}
+
+	public Plane getPlane() {
+		return plane;
+	}
 }

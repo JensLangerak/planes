@@ -17,8 +17,8 @@ public class Launcher extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		Game game = new Game(60);
-		game.init(primaryStage);
+		Game game = Game.getInstance();
+		game.init(primaryStage, 60);
 		game.startGameLoop();
 		primaryStage.show();
 	}

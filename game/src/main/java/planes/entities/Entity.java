@@ -243,7 +243,7 @@ public abstract class Entity {
 	 * @param orientation the orientation of the plane.
 	 * @return vector that represents the orientation.
 	 */
-	protected Vector2D getDir(double orientation) {
+	public static Vector2D getDir(double orientation) {
 		return new Vector2D(
 				-(float) Math.sin(orientation),
 				(float) Math.cos(orientation)).normalize();
