@@ -20,7 +20,7 @@ public class Plane extends Entity {
 	protected int fireTimer = 0;
 	protected int maxFireTime = 30;
 	protected int hitThick = 30;
-	int score = 0;
+	protected int score = 0;
 
 	/**
 	 * Create a new plane.
@@ -100,7 +100,7 @@ public class Plane extends Entity {
 
 	@Override
 	public void updateCollisionMesh() {
-		fireTimer = (fireTimer >= maxFireTime) ? maxFireTime : fireTimer + 1;
+		fireTimer = fireTimer >= maxFireTime ? maxFireTime : fireTimer + 1;
 		this.collisionMesh = new ArrayList<>();
 		this.collisionMesh.add(new Circle(this.pos, 20));
 	}

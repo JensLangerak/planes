@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class Node {
 	protected float value;
-	protected Map<Node,Float> edges;
+	protected Map<Node, Float> edges;
 
 	protected Node() {
 		edges = new HashMap<>();
@@ -27,7 +27,7 @@ public class Node {
 	 * @return the node value.
 	 */
 	protected float getValue() {
-		return (value > 0) ? (value < 1) ? value : 1 : 0;
+		return value > 0 ? value < 1 ? value : 1 : 0;
 	}
 
 	/**

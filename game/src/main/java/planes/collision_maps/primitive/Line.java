@@ -174,4 +174,9 @@ public class Line implements Intersect {
 		return false;
 	}
 
+	@Override
+	public int hashCode() {
+		return this.left.hashCode() + this.right.hashCode();
+	}
+
 }

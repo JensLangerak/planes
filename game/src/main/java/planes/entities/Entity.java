@@ -7,7 +7,6 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Class that represents an entity in a 2d plane.

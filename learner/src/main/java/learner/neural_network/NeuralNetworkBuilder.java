@@ -1,13 +1,11 @@
 package learner.neural_network;
 
 import java.util.*;
-import java.util.jar.Pack200;
 
 /**
  * Created by jens on 10/13/16.
  */
 public class NeuralNetworkBuilder {
-	protected NeuralNetwork network;
 	protected Node[] startNodes;
 	protected Node[] endNodes;
 	protected List<Node[]> hiddenLayers;

@@ -58,8 +58,7 @@ public class Triangle implements Body {
 	 * @param p3 line end point.
 	 * @return a positive or negative distance.
 	 */
-	private double sign (Vector2D p1, Vector2D p2, Vector2D p3)
-	{
+	private double sign(Vector2D p1, Vector2D p2, Vector2D p3) {
 		return (p1.getX() - p3.getX()) * (p2.getY() - p3.getY())
 				- (p2.getX() - p3.getX()) * (p1.getY() - p3.getY());
 	}
@@ -76,7 +75,7 @@ public class Triangle implements Body {
 		b2 = sign(point, points[1], points[2]) < 0.0;
 		b3 = sign(point, points[2], points[0]) < 0.0;
 
-		return ((b1 == b2) && (b2 == b3));
+		return b1 == b2 && b2 == b3;
 	}
 
 	@Override
@@ -96,7 +95,7 @@ public class Triangle implements Body {
 	public ArrayList<Line> getLines() {
 		ArrayList<Line> lines = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
-			lines.add(new Line(points[i], points[(i+1)%3]));
+			lines.add(new Line(points[i], points[(i + 1) % 3]));
 		}
 		return lines;
 	}

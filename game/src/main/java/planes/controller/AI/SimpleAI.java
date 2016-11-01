@@ -17,7 +17,7 @@ import java.util.List;
 public class SimpleAI extends Agent implements AI {
 	protected PlaneController plane;
 	protected NeuralNetwork network;
-	protected float prevValues[];
+	protected float[] prevValues;
 
 
 	public SimpleAI(PlaneController plane, NeuralNetwork network) {
@@ -30,7 +30,7 @@ public class SimpleAI extends Agent implements AI {
 
 	@Override
 	public void step() {
-		float startValues[] = getStartValues();
+		float[] startValues = getStartValues();
 		float[] endValues = network.calculateNetwork(startValues);
 
 		performAction(endValues);
@@ -53,11 +53,19 @@ public class SimpleAI extends Agent implements AI {
 	}
 
 	protected float[] getStartValues() {
-		float startValues[] = new float[getStartNodes()];
+		float[] startValues = new float[getStartNodes()];
 		Vector2D centerRefPoint = plane.getPos().add(10, Entity.getDir(plane.getOrientation()));
 
-		Vector2D leftRefPoint  = plane.getPos().add(10, Entity.getDir((plane.getOrientation() - 0.5 * Math.PI) % (2 * Math.PI)));
-		Vector2D rightRefPoint = plane.getPos().add(10, Entity.getDir((plane.getOrientation() + 0.5 * Math.PI) % (2 * Math.PI)));
+		Vector2D leftRefPoint  = plane.getPos()
+									  .add(10,
+										   Entity.getDir(
+												   (plane.getOrientation() - 0.5 * Math.PI)
+														   % (2 * Math.PI)));
+		Vector2D rightRefPoint = plane.getPos()
+									  .add(10,
+										   Entity.getDir(
+												   (plane.getOrientation() + 0.5 * Math.PI)
+														   % (2 * Math.PI)));
 		List<Entity> entityList = Game.getInstance().getEntityManager().getEntities();
 		startValues[0]  = getClosestPlane(entityList, leftRefPoint);
 		startValues[1]  = getClosestPlane(entityList, centerRefPoint);
@@ -92,17 +100,22 @@ public class SimpleAI extends Agent implements AI {
 
 	protected float getClosestPlane(List<Entity> entityList, Vector2D pos) {
 		return entityList.stream()
-				.filter(e -> e instanceof Plane && !e.equals(this.plane.getPlane())) //get all the planes, except the current one
-				.map(e -> e.getPos().distance(pos)) //calculate the distance
-				.min((d1, d2) -> Double.compare(d1, d2)) //get the min distance
-				.get().floatValue();
+						 //get all the planes, except the current one
+						 .filter(e -> e instanceof Plane && !e.equals(this.plane.getPlane()))
+						 .map(e -> e.getPos().distance(pos)) //calculate the distance
+						 .min((d1, d2) -> Double.compare(d1, d2)) //get the min distance
+						 .get().floatValue();
 	}
 
 	protected float getClosestProjectile(List<Entity> entityList, Vector2D pos) {
 		return entityList.stream()
-				.filter(e -> e instanceof Projectile && !((Projectile)e).getOwner().equals(this.plane.getPlane())) //get all the projectiles that are not fired by this plane
-				.map(e -> e.getPos().distance(pos)) //calculate the distance
-				.min((d1, d2) -> Double.compare(d1, d2)) //get the min distance
-				.get().floatValue();
+						 //get all the projectiles that are not fired by this plane
+						 .filter(
+								 e -> e instanceof Projectile
+										 && !((Projectile) e).getOwner()
+															 .equals(this.plane.getPlane()))
+						 .map(e -> e.getPos().distance(pos)) //calculate the distance
+						 .min((d1, d2) -> Double.compare(d1, d2)) //get the min distance
+						 .get().floatValue();
 	}
 }

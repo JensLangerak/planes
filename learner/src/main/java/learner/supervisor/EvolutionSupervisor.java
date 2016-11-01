@@ -1,8 +1,5 @@
 package learner.supervisor;
 
-import learner.neural_network.NeuralNetwork;
-
-import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -28,12 +25,16 @@ public class EvolutionSupervisor {
 	 * @param generationSize number of networks in one generation.
 	 * @param networkSize Array with the number of nodes per layer.
 	 */
-	public EvolutionSupervisor(int generationSize, int[] networkSize, float minEdgeValue, float maxEdgeValue, float mutateChange) {
+	public EvolutionSupervisor(int generationSize,
+							   int[] networkSize,
+							   float minEdgeValue,
+							   float maxEdgeValue,
+							   float mutateChange) {
 		this.generationSize = generationSize;
 		if (generationSize < 2) {
 			throw new IllegalArgumentException("To small generation, need at least a size of 2.");
 		}
-		this.networkSize = networkSize;
+		this.networkSize = networkSize.clone();
 		if (networkSize.length < 2) {
 			throw new IllegalArgumentException("network must have at least a start and end layer");
 		}
@@ -51,7 +52,7 @@ public class EvolutionSupervisor {
 	 * Generate a random first generation.
 	 */
 	protected void generateFirstGeneration() {
-		Random numberGen = new Random(System.currentTimeMillis());
+		numberGen = new Random(System.currentTimeMillis());
 		int size = calculateNumberOfEdges(networkSize);
 		this.currentGeneration = new Stack[generationSize];
 		for (int i = 0; i < generationSize; i++) {
@@ -67,21 +68,26 @@ public class EvolutionSupervisor {
 	 */
 	public void nextGeneration() {
 		generationCount++;
-		List sortedList = new LinkedList(fitnessRate.entrySet());
+		List<Map.Entry> sortedList = new LinkedList(fitnessRate.entrySet());
 
 		// sort high to low
 		Collections.sort(sortedList, (o1, o2) -> ((Comparable) ((Map.Entry) o2).getValue())
 				.compareTo(((Map.Entry) o1).getValue()));
-		Stack<Float>[] sortedCurrentGeneration = (Stack<Float>[]) sortedList.toArray();
+
+		@SuppressWarnings("unchecked")
+		Stack<Float>[] sortedCurrentGeneration =
+				(Stack<Float>[]) sortedList.stream()
+										   .map(i -> i.getKey())
+										   .toArray(size -> new Object[size]);
 		int maxRandomValue = generationSize / 2 * (generationSize + 1);
 
 		Stack<Float>[] nextGen = new Stack[generationSize];
 		for (int i = 0; i < generationSize; i++) {
-			int parent1 = calculateParentIndex(numberGen.nextInt(maxRandomValue), maxRandomValue);
-			int parent2 = calculateParentIndex(numberGen.nextInt(maxRandomValue), maxRandomValue);
+			int parent1 = calculateParentIndex(numberGen.nextInt(maxRandomValue));
+			int parent2 = calculateParentIndex(numberGen.nextInt(maxRandomValue));
 			//get different parents
-			while (parent1==parent2) {
-				parent2 = calculateParentIndex(numberGen.nextInt(maxRandomValue), maxRandomValue);
+			while (parent1 == parent2) {
+				parent2 = calculateParentIndex(numberGen.nextInt(maxRandomValue));
 			}
 			nextGen[i] = breed(sortedCurrentGeneration[parent1], sortedCurrentGeneration[parent2]);
 		}
@@ -95,13 +101,12 @@ public class EvolutionSupervisor {
 	/**
 	 * Calculate the parent index.
 	 * @param randomValue the random value that is used
-	 * @param maxRandomValue the max value of the random value.
 	 * @return the parent index.
 	 */
-	private int calculateParentIndex(int randomValue, int maxRandomValue) {
+	private int calculateParentIndex(int randomValue) {
 		int index = 0;
-		while (maxRandomValue > 0) {
-			maxRandomValue = maxRandomValue - generationSize + index;
+		while (randomValue > 0) {
+			randomValue = randomValue - generationSize + index;
 			index++;
 		}
 		return index;
@@ -121,7 +126,7 @@ public class EvolutionSupervisor {
 	}
 
 	/**
-	 * Get a random number between
+	 * Get a random number between.
 	 * @param min the minimum value of the random number.
 	 * @param max the maximum number of the value.
 	 *

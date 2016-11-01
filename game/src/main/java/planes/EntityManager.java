@@ -1,6 +1,5 @@
 package planes;
 
-import planes.controller.Agent;
 import planes.controller.PlaneController;
 import planes.controller.Player;
 import planes.entities.Entity;
@@ -73,14 +72,14 @@ public class EntityManager {
 		}
 
 		for (Entity entity:deadList) {
-			entities.remove((entity));
+			entities.remove(entity);
 		}
 
 
 	}
 
 	/**
-	 * Draw all the entities
+	 * Draw all the entities.
 	 */
 	public void draw() {
 		this.clear();

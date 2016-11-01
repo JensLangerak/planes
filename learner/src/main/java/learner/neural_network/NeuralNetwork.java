@@ -2,7 +2,6 @@ package learner.neural_network;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.Pack200;
 
 /**
  * Created by jens on 10/13/16.
@@ -13,9 +12,9 @@ public class NeuralNetwork {
 	protected List<Node[]> hiddenLayers;
 
 	public NeuralNetwork(Node[] startNodes, Node[] endNodes, List<Node[]> hiddenLayers) {
-		this.startNodes = startNodes;
-		this.endNodes = endNodes;
-		this.hiddenLayers = hiddenLayers;
+		this.startNodes = startNodes.clone();
+		this.endNodes = endNodes.clone();
+		this.hiddenLayers = new ArrayList<Node[]>(hiddenLayers);
 	}
 
 	/**
